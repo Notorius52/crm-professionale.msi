@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+    <Product Id="*" Name="CRM Professionale" Language="1040" Version="1.0.0.0" Manufacturer="Tuo Nome" UpgradeCode="707c0af2-d3fd-4375-b246-4caac9602a30">
+        <Package Id="*" InstallerVersion="200" Compressed="yes" />
+
+        <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+        <!-- Directory Structure -->
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLDIR" Name="CRM Professionale" />
+            </Directory>
+            <Directory Id="DesktopFolder" Name="Desktop" />
+        </Directory>
+        
+        <!-- Icons and Properties -->
+        <Icon Id="AppIcon.ico" SourceFile="ico.png" />
+        <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+
+        <!-- Features to Install -->
+        <Feature Id="ProductFeature" Title="CRM Professionale" Level="1">
+            <ComponentGroupRef Id="ApplicationComponents" />
+            <ComponentGroupRef Id="ShortcutComponents" />
+        </Feature>
+    </Product>
+    
+    <!-- Fragments with Components -->
+    <Fragment>
+        <!-- Component Group for application files -->
+        <ComponentGroup Id="ApplicationComponents">
+            <!-- Main GUI JAR component, to be installed in INSTALLDIR -->
+            <Component Id="CrmGuiJar" Guid="*" Directory="INSTALLDIR">
+                <File Id="CrmGuiJarFile" Name="crm-gui-1.0-SNAPSHOT.jar" Source="C:\Users\HP\Desktop\crm-progetto\crm-gui\target\crm-gui-1.0-SNAPSHOT.jar" />
+            </Component>
+            
+            <!-- Other JAR components, also in INSTALLDIR -->
+            <Component Id="CrmCoreJar" Guid="*" Directory="INSTALLDIR">
+                <File Id="CrmCoreJarFile" Name="crm-core-1.0-SNAPSHOT.jar" Source="C:\Users\HP\Desktop\crm-progetto\crm-core\target\crm-core-1.0-SNAPSHOT.jar" />
+            </Component>
+            
+            <Component Id="CrmDatabaseJar" Guid="*" Directory="INSTALLDIR">
+                <File Id="CrmDatabaseJarFile" Name="crm-database-1.0-SNAPSHOT.jar" Source="C:\Users\HP\Desktop\crm-progetto\crm-database\target\crm-database-1.0-SNAPSHOT.jar" />
+            </Component>
+            
+            <Component Id="CrmUiJar" Guid="*" Directory="INSTALLDIR">
+                <File Id="CrmUiJarFile" Name="crm-ui-1.0-SNAPSHOT.jar" Source="C:\Users\HP\Desktop\crm-progetto\crm-ui\target\crm-ui-1.0-SNAPSHOT.jar" />
+            </Component>
+        </ComponentGroup>
+
+        <!-- Component Group for shortcuts to resolve ICE errors -->
+        <ComponentGroup Id="ShortcutComponents">
+            <Component Id="DesktopShortcutComponent" Guid="*" Directory="DesktopFolder">
+                <!-- Use a RegistryValue as KeyPath for per-user data -->
+                <RegistryValue Root="HKCU" Key="Software\Microsoft\Nome della tua App" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+
+                <!-- The shortcut itself -->
+                <Shortcut Id="DesktopShortcut"
+                          Name="CRM Professionale"
+                          Description="Avvia CRM Professionale"
+                          Target="[INSTALLDIR]crm-gui-1.0-SNAPSHOT.jar"
+                          Arguments="-jar &quot;[#CrmGuiJarFile]&quot;"
+                          Icon="AppIcon.ico"
+                          Advertise="no" />
+                
+                <RemoveFolder Id="DesktopFolder" On="uninstall" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

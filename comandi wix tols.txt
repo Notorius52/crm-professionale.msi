@@ -1,0 +1,9 @@
+cd C:\Users\HP\Desktop\crm-installer
+
+candle.exe Product.wxs
+
+light.exe Product.wixobj -out crm-professionale.msi
+
+"C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe" -ext WixUtilExtension Product.wxs
+
+"C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe" -ext WixUtilExtension Product.wixobj -out crm-professionale.msi
